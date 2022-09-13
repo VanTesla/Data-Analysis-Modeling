@@ -1,0 +1,362 @@
+---
+title: "HW1"
+author: "Suyan Dai"
+date: "2022-09-12"
+output: html_document
+---
+
+# 1.18
+
+Import the data sat:
+
+```{r}
+data_18 <- read.table('data_1.18.txt',header=T,sep=',')
+```
+
+## (b)
+
+Make a bar graph of the percents. The graph gives a clearer picture of the main contributors to garbage if you order the bars from tallest to shortest.
+
+<font color="green">Answer:</font> 
+
+```{r}
+library(ggplot2)
+
+ggplot(data = data_18,aes(x = reorder(Material, -Percent_of_total),  # recorder() is used to sort
+                          y = Percent_of_total)) + 
+  xlab("Materials")+
+  ylab("Percent of Total")+
+  geom_bar(stat = 'identity')+
+  theme(axis.text.x=element_text(angle=90, hjust=1))+
+  geom_col(fill = '#669933')
+
+```
+
+## (c)
+
+If you use software, also make a pie chart of the percents. Comparing the two graphs, notice that it is easier to see the small differences among “Food scraps,” “Plastics,” and “Yard trimmings” in the bar graph.
+
+<font color="green">Answer:</font> 
+
+```{r}
+library(ggplot2)
+
+myLabel = as.vector(data_18$Material)
+myLabel = paste(myLabel, "(", data_18$Percent_of_total, "%)        ", sep = "")
+
+bar = ggplot(data_18, aes(x = '',
+                          y = Percent_of_total,
+                          fill = Material)) + 
+  geom_bar(stat = "identity", width = 1) +    
+  coord_polar(theta = "y") + 
+  labs(x = "", y = "", title = "") +
+  theme(axis.ticks = element_blank()) +
+  theme(legend.title = element_blank()) +
+  scale_fill_discrete(breaks = data_18$Material, labels = myLabel) +
+  theme(axis.text.x = element_blank()) +
+  theme(panel.grid=element_blank()) +
+  theme(panel.border=element_blank())
+bar
+```
+
+# 1.37
+
+<font color="green">Answer:</font> 
+
+Chart a corresponds to the learning time histogram (question 4);<br>
+Chart b corresponds to left-handed/right-handed histogram (question 2);<br>
+Chart c corresponds to the gender histogram (question 1);<br>
+Chart d corresponds to the height histogram (question 3).
+
+Reason:
+Gender and left-handed/right-handed are both two-choice questions, and only graphs b and c can correspond. Since most people in the world are right-handed and the number of men and women is roughly equal, we can draw the following two inferences:
+
+> Chart b corresponds to left-handed/right-handed histogram (question 2).
+>
+> Chart c corresponds to the gender histogram (question 1).
+
+In the case of a large sample, the height of the students is roughly distributed normally, and the data is concentrated near the mean, so the chart d meets the requirements. <br>
+The remaining graph a is the study time, because according to experience, the number of students who study for a long time is smaller than the number of students who study for a short time.
+
+# 1.42
+
+Table 1.8 gives the survival times in days of 72 guinea pigs after they were injected with tubercle bacilli in a medical experiment.24 Make a suitable graph and describe the shape, center, and spread of the distribution of survival times. Are there any outliers?
+
+<font color="green">Answer:</font> 
+
+First, import the data and draw a histogram.
+
+```{r}
+data_42 <- scan("data_1.42.txt");
+data_42 <- c(data_42)
+hist(data_42, 
+     breaks = 6,
+     xlab = "Survival days",
+     ylab = "frequency",
+     main = "")
+```
+
+As you can see in the histogram, most guinea pigs survive between 100 and 200 days, so it can be inferred that there may be outliers in the data for guinea pigs that survive longer.
+
+After rounding the data to the nearest ten, draw a stem-and-leaf plot as follows:
+
+```{r}
+stem(data_42)
+```
+
+We can use quartiles for outlier analysis of the data:
+
+```{r}
+Q <- quantile(data_42,c(0.25,0.75))
+IQR <- as.double(Q[2]-Q[1])
+Q3 <- as.double(quantile(data_42,c(0.75)))
+limit <- Q3 + 1.5 * IQR
+limit
+```
+
+Based on the 1.5 × IQR rule for outliers, we can easily find that the value larger than 249 is outlier.
+
+# 1.57
+
+Blood proteins in children from Papua New Guinea. C-reactive protein (CRP) is a substance that can be measured in the blood. Values increase substantially within 6 hours of an infection and reach a peak within 24 to 48 hours after . In adults, chronically high values have been linked to an increased risk of cardiovascular disease. In a study of apparently healthy children aged 6 to 60 months in Papua New Guinea, CRP was measured in 90 children.28 The units are milligrams per liter (mg/l). Here are the data from a random sample of 40 of these children:
+
+>0.00 3.90 5.64 8.22 0.00 5.62 3.92 6.81 30.61 0.00
+>
+>73.20 0.00 46.70 0.00 0.00 26.41 22.82 0.00 0.00 3.49
+>
+>0.00 0.00 4.81 9.57 5.36 0.00 5.66 0.00 59.76 12.38
+>
+>15.74 0.00 0.00 0.00 0.00 9.37 20.78 7.10 7.89 5.53
+
+Import data:
+
+```{r}
+data_57 <- scan("data_1.57.txt")
+```
+
+## (a) 
+
+<strong>Find the five-number summary for these data.</strong>
+
+<font color="green">Answer:</font> As follows: from left to right are the minimum value, Q1, median, Q3 and maximum value.
+
+```{r}
+quantile(data_57)
+```
+
+## (b)
+
+<strong>Make a boxplot.</strong>
+
+<font color="green">Answer:</font> 
+
+```{r}
+boxplot(data_57)
+```
+
+## (c)
+
+<strong>Make a histogram.</strong>
+
+<font color="green">Answer:</font> 
+
+```{r}
+hist(data_57, 
+     breaks = 8, 
+     xlab = "CPR Concentration (mg/L)",
+     ylab = "Frequency",
+     main = "")
+```
+
+## (d)
+
+<strong>Write a short summary of the major features of this distribution. Do you prefer the boxplot or the histogram for these data?</strong>
+
+<font color="green">Answer:</font> In this distribution, the vast majority of the data is in the range of 0 to 10, and a small number of individuals have outliers.
+
+I prefer histogram because it is easily to see the distribution of the data from the histogram, and we can have a preliminary understanding of the amount of data in each interval.
+
+# 1.73
+
+Many standard statistical methods that you will study in Part II of this book are intended for use with distributions that are symmetric and have no outliers. These methods start with the mean and standard deviation, $\bar x$ and $s$. Two examples of scientific data for which standard methods should work well are the pH measurements in Exercise 1.36 (page 27) and Cavendish’s measurements of the density of the earth in Exercise 1.40 (page 28).
+
+Data:
+
+1.pH measurements
+
+>4.33 4.38 4.48 4.48 4.50 4.55 4.59 4.59
+4.61 4.61 4.75 4.76 4.78 4.82 4.82 4.83
+4.86 4.93 4.94 4.94 4.94 4.96 4.97 5.00
+5.01 5.02 5.05 5.06 5.08 5.09 5.10 5.12
+5.13 5.15 5.15 5.15 5.16 5.16 5.16 5.18
+5.19 5.23 5.24 5.29 5.32 5.33 5.35 5.37
+5.37 5.39 5.41 5.43 5.44 5.46 5.46 5.47
+5.50 5.51 5.53 5.55 5.55 5.56 5.61 5.62
+5.64 5.65 5.65 5.66 5.67 5.67 5.68 5.69
+5.70 5.75 5.75 5.75 5.76 5.76 5.79 5.80
+5.81 5.81 5.81 5.81 5.85 5.85 5.90 5.90
+6.00 6.03 6.03 6.04 6.04 6.05 6.06 6.07
+6.09 6.13 6.21 6.34 6.43 6.61 6.62 6.65
+6.81
+
+2.Cavendish’s measurements
+
+>5.50 5.61 4.88 5.07 5.26 5.55 5.36 5.29
+5.58 5.65 5.57 5.53 5.62 5.29 5.44 5.34
+5.79 5.10 5.27 5.39 5.42 5.47 5.63 5.34
+5.46 5.30 5.75 5.68 5.85
+
+## (a)
+
+<strong>Summarize each of these data sets by giving $\bar x$ and $s$.</strong>
+
+<font color="green">Answer:</font> For pH measurements, import data firstly.
+
+```{r}
+ph <- scan("data_1.73_ph.txt")
+```
+
+Then calculate the average value and standard deviation:
+
+```{r}
+ave_ph <- mean(ph)
+sd_ph <- var(ph)^0.5
+ave_ph
+sd_ph
+```
+
+So $\bar x=5.426$, $s=0.538$.
+
+---
+
+For Cavendish’s measurements, import data firstly:
+
+```{r}
+cm <- scan("data_1.73_cav.txt")
+```
+
+Then calculate the average value and standard deviation:
+
+```{r}
+ave_cm <- mean(cm)
+sd_cm <- var(cm)^0.5
+ave_cm
+sd_cm
+```
+
+So $\bar x=5.458$, $s=0.221$.
+
+## (b)
+
+<strong>Find the median for each data set. Is the median quite close to the mean, as we expect it to be in these examples?</strong>
+
+<font color="green">Answer:</font> For pH measurements:
+
+```{r}
+median_ph <- median(ph)
+median_ph
+```
+
+The median is 5.44 and the mean is 5.426. They are quiet close as we expect.
+
+---
+For Cavendish’s measurements:
+
+```{r}
+median_cm <- median(cm)
+median_cm
+```
+
+The median is 5.46 and the mean is 5.458. They are also quiet close as we expect.
+
+# 1.82
+
+Income for people with bachelor’s degrees. The data include 14,959 people whose highest level of education is a bachelor’s degree.
+
+## (a)
+
+<strong>What is the position of the median in the ordered list of incomes (1 to 14,959)? From the boxplot, about what is the median income of people with a bachelor’s degree?</strong>
+
+<font color="green">Answer:</font> The median is at 7480th position. According to the figure , it is about 45000 dollars.
+
+## (b)
+
+<strong>What is the position of the first and third quartiles in the ordered list of incomes for these people? About what are the numerical values of Q1 and Q3?</strong>
+
+<font color="green">Answer:</font> At 3740th position and 11220th position. Q1 is about 32000 dollars and Q3 is about 65000 dollars.
+
+## (c)
+
+<strong>You answered (a) and (b) from a boxplot that omits the lowest 5% and the highest 5% of incomes. Explain why leaving out these values has only a very small effect on the median and quartiles.</strong>
+
+<font color="green">Answer:</font> These omitted data volumes are small and symmetrical about the median location.
+
+# 1.116
+
+Binge drinking survey. One reason that Normal distributions are important is that they describe how the results of an opinion poll would vary if the poll were repeated many times. About 20% of college students say they are frequent binge drinkers. Think about taking many randomly chosen samples of 1600 students. The proportions of college students in these samples who say they are frequent binge drinkers will follow the Normal distribution with mean 0.20 and standard deviation 0.01. Use this fact and the 68–95–99.7 rule to answer these questions.
+
+
+<font color="green">Answer:</font> A visualization of this normal distribution is as follows:
+
+```{r}
+curve(dnorm(x, 0.20, 0.01), from = 0.1, to = 0.3)
+```
+
+## (a)
+<strong>In many samples, what percent of samples give results above 0.2? Above 0.22?</strong>
+
+<font color="green">Answer:</font> First find the cdf of the distribution, then calculate $(1-cdf)\times100%$.
+
+```{r}
+cdf_0.2 = pnorm(0.2, 0.20, 0.01)
+re_0.2 = 1 - cdf_0.2
+re_0.2
+cdf_0.22 = pnorm(0.22, 0.20, 0.01)
+re_0.22 = 1-cdf_0.22
+re_0.22
+```
+
+So the percent of samples above 0.2 is 50%; the percent of samples above 0.22 is 2.28%.
+
+## (b)
+<strong>In a large number of samples, what range contains the central 95% of proportions of students who say they are frequent binge drinkers?</strong>
+
+<font color="green">Answer:</font> According to the 68–95–99.7 rule, the range between $\bar x \pm 2s$ contains the central 95% of proportions of students who say they are frequent binge drinkers. So for the distribution, the range is from 0.18 to 0.22.
+
+# 1.140
+
+Quartiles for Normal distributions. The quartiles of any distribution are the values with cumulative proportions 0.25 and 0.75.
+
+## (a)
+<strong>What are the quartiles of the standard Normal distribution?</strong>
+
+<font color="green">Answer:</font> $Q1=-0.67449$, $Q2=0$(median) and $Q3=0.67449$
+
+## (b)
+<strong>Using your numerical values from (a), write an equation that gives the quartiles of the N(μ, σ) distribution in terms of μ and σ.</strong>
+
+<font color="green">Answer:</font> According to the 3σ principle, the quartiles should satisfy the form of $\mu \pm k\sigma$. Based on $\frac{X-\mu}{\sigma}=Z$, code shows as below:
+
+```{r}
+quartitles <- function(μ, σ) {
+  q1 <- μ - 0.67449*σ
+  q2 <- μ
+  q3 <- μ + 0.67449*σ
+  return(c(q1, q2, q3))
+}
+```
+
+The function outputs Q1, median, and Q3 in sequence.
+
+## (c)
+<strong>The length of human pregnancies from conception to birth varies according to a distribution that is approximately Normal with mean 266 days and standard deviation 16 days. Apply your result from (b): what are the quartiles of the distribution of lengths of human pregnancies?</strong>
+
+<font color="green">Answer:</font> In this case, $\mu = 266$ and $\sigma = 16$.
+Code shows as below:
+
+```{r}
+Qs <- quartitles(266, 16)
+Qs
+```
+
+So $Q1=255.2082$, $Q2=266$ (also median) and $Q3=276.7918$.
