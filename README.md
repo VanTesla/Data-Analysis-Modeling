@@ -1,2 +1,3 @@
 # Data-Analysis-Modeling
-Homework of Data Analysis Modeling in SCUT
+
+<strong>The code is for learning only, any other use of this code is prohibited.</strong>
